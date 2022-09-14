@@ -10,7 +10,8 @@
 		"ecmaVersion": "latest"
 	},
 	"rules": {
-		"no-tabs": "warn",
-		"indent": "warn"
+		"no-tabs": "off",
+		"indent": "off",
+		"linebreak-style": "off"
 	}
 }
