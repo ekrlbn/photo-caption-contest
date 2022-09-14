@@ -17,6 +17,56 @@ const User = sequelize.define('User', {
 	username: { type: DataTypes.STRING, allowNull: false },
 	password: { type: DataTypes.STRING, allowNull: false },
 });
-// User.sync({ force: true });
 
-module.exports = { User };
+const Image = sequelize.define('Image', {
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+	filename: { type: DataTypes.STRING },
+	user_id: {
+		type: DataTypes.INTEGER,
+		references: { model: 'Users', key: 'id' },
+	},
+	extension: { type: DataTypes.STRING },
+	citation: { type: DataTypes.STRING },
+});
+
+const Caption = sequelize.define('Caption', {
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+	user_id: {
+		type: DataTypes.INTEGER,
+		references: { model: 'Users', key: 'id' },
+	},
+	image_id: {
+		type: DataTypes.INTEGER,
+		references: { model: 'Images', key: 'id' },
+	},
+	caption: { type: DataTypes.STRING },
+	like: {
+		type: DataTypes.INTEGER,
+		defaultValue: 0,
+	},
+});
+
+const Like = sequelize.define('Like', {
+	user_id: {
+		type: DataTypes.INTEGER,
+		references: { model: 'Users', key: 'id' },
+	},
+	caption_id: {
+		type: DataTypes.INTEGER,
+		references: { model: 'Captions', key: 'id' },
+	},
+});
+
+// async function syncModels() {
+// 	await User.sync({ force: true });
+// 	await Image.sync({ force: true });
+// 	await Caption.sync({ force: true });
+// 	await Like.sync({ force: true });
+// }
+// syncModels();
+module.exports = {
+	User,
+	Image,
+	Caption,
+	Like,
+};

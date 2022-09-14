@@ -1,10 +1,9 @@
-const express = require('express');
+const authRouter = require('express').Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { isLength, isEmpty } = require('validator').default;
 const { User } = require('../models/models');
 
-const authRouter = express.Router();
 authRouter.post('/user', async (req, res) => {
 	try {
 		const { password, username } = req.body;
@@ -26,11 +25,13 @@ authRouter.post('/user', async (req, res) => {
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
 	}
-	return res.json({ message: 'user created' });
+	return res.status(201).json({ message: 'user created' });
 });
 
 authRouter.use(async (req, res, next) => {
 	try {
+		const { authorization } = req.headers;
+		if (!authorization) throw new Error('token not found');
 		const token = req.headers.authorization.split(' ')[1];
 		const user = await jwt.verify(token, process.env.JWT_SECRET);
 

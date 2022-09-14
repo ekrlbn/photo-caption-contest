@@ -1,0 +1,34 @@
+openapi: '3.0.2'
+info:
+  title: Photo Caption
+  version: '1.0'
+servers:
+  - url: http://localhost:8080/api
+
+paths:
+  /user:
+    post:
+      description: 'creates a new user'
+      requestBody:
+        description: 'user instance that consists username, password'
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: 'username'
+                password:
+                  type: string
+                  example: 'password'
+                  minLength: 8
+      parameters: []
+      tags:
+        - 'User'
+      responses:
+        '201':
+          description: 'user created'
+        '500':
+          description: 'internal server error'
