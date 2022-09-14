@@ -29,4 +29,19 @@ authRouter.post('/user', async (req, res) => {
 	return res.json({ message: 'user created' });
 });
 
+authRouter.use(async (req, res, next) => {
+	try {
+		const token = req.headers.authorization.split(' ')[1];
+		const user = await jwt.verify(token, process.env.JWT_SECRET);
+
+		const foundUser = await User.findOne({
+			where: { username: user.username, password: user.password },
+		});
+		if (!foundUser) return res.sendStatus(401);
+		req.user = foundUser;
+		return next();
+	} catch (error) {
+		return res.status(401).json({ message: error.message });
+	}
+});
 module.exports = { authRouter };
