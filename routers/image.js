@@ -1,5 +1,6 @@
 const imageRouter = require('express').Router();
-const path = require('path');
+// const path = require('path');
+const fs = require('fs').promises;
 const multer = require('multer');
 const { Image } = require('../models/models');
 
@@ -20,12 +21,13 @@ imageRouter.get('/:id', async (req, res) => {
 	try {
 		const foundImage = await Image.findByPk(req.params.id);
 		if (!foundImage) return res.sendStatus(404);
-		res.setHeader('Content-Type', 'image/png');
-		return res.download(
-			path.join(process.cwd(), `\\uploads\\${foundImage.filename}`),
-		);
+		res.setHeader('Content-Type', `image/${foundImage.extension}`);
+		const filePath = `./uploads/${foundImage.filename}`;
+		await fs.access(filePath);
+		return res.download(filePath);
 	} catch (error) {
-		return res.send(500, error.message);
+		if (error.errno === -4058) return res.sendStatus(404);
+		return res.sendStatus(500);
 	}
 });
 

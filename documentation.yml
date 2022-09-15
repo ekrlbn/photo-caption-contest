@@ -1,17 +1,14 @@
-openapi: '3.0.2'
+openapi: 3.0.2
 info:
   title: Photo Caption
   version: '1.0'
 servers:
   - url: http://localhost:8080/api
-
 paths:
   /user:
     post:
-      description: 'creates a new user'
+      summary: creates new user instance
       requestBody:
-        description: 'user instance that consists username, password'
-        required: true
         content:
           application/json:
             schema:
@@ -19,16 +16,142 @@ paths:
               properties:
                 username:
                   type: string
-                  example: 'username'
                 password:
                   type: string
-                  example: 'password'
-                  minLength: 8
-      parameters: []
-      tags:
-        - 'User'
+              example: # Sample object
+                username: username
+                password: password
+      description: ''
+      operationId: 'post_user'
       responses:
         '201':
-          description: 'user created'
+          description: User Created
+          headers:
+            Authorization:
+              schema:
+                description: JWT token that consists user credentials
+                type: string
+
         '500':
-          description: 'internal server error'
+          description: Internal server Error
+      tags:
+        - User
+  /images{id}:
+    get:
+      summary: get image that corresponds with id
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+      tags:
+        - Image
+  /images:
+    post:
+      summary: post a new image
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '201':
+          description: Created
+        '500':
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+      tags:
+        - Image
+  /caption{imageID}:
+    get:
+      summary: get all the captions corresponding the image
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: imageID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+
+        '500':
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+      tags:
+        - Caption
+  /caption:
+    post:
+      summary: add new caption to any image
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Created
+        '500':
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                imageID:
+                  type: integer
+                caption:
+                  type: string
+              example: # Sample object
+                imageID: 1
+                caption: 'what a spectacular scenery!'
+      tags:
+        - Caption
+  /caption{id}:
+    put:
+      summary: add one like to specified capiton
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: No Content
+        '500':
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+      tags:
+        - Caption
+
+tags:
+  - name: User
+  - name: Image
+  - name: Caption
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
