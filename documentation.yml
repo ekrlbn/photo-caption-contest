@@ -190,25 +190,6 @@ paths:
       tags:
         - Caption
   /caption{id}:
-    put:
-      summary: like or unlike the specified capiton with the id
-      security:
-        - bearerAuth: []
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-      responses:
-        '204':
-          description: No Content
-        '500':
-          description: Internal Server Error
-        '401':
-          description: Unauthorized
-      tags:
-        - Caption
     delete:
       summary: delete caption that corresponds with the id
       security:
