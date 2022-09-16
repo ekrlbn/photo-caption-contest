@@ -31,4 +31,23 @@ imageRouter.get('/:id', async (req, res) => {
 	}
 });
 
+imageRouter.delete('/:id', async (req, res) => {
+	try {
+		const { user } = req;
+		const foundImage = await Image.findOne({
+			where: { id: req.params.id, user_id: user.id },
+		});
+		if (!foundImage) return res.sendStatus(404);
+		const filePath = `./uploads/${foundImage.filename}`;
+		await fs.access(filePath);
+		await fs.rm(filePath);
+		await Image.destroy({ where: { id: req.params.id, user_id: user.id } });
+		return res.sendStatus(204);
+	} catch (error) {
+		console.log(error);
+		if (error.errno === -4058) return res.sendStatus(404);
+		return res.sendStatus(500);
+	}
+});
+
 module.exports = { imageRouter };

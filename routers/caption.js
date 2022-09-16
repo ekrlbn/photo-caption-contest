@@ -37,7 +37,16 @@ captionRouter.put('/:id', async (req, res) => {
 		const foundLike = await Like.findOne({
 			where: { user_id: userID, caption_id: foundCaption.id },
 		});
-		if (foundLike) return res.sendStatus(403);
+		if (foundLike) {
+			await Like.destroy({
+				where: { user_id: userID, caption_id: foundCaption.id },
+			});
+			await Caption.update(
+				{ like: foundCaption.like - 1 },
+				{ where: { id: foundCaption.id } },
+			);
+			return res.sendStatus(204);
+		}
 		await Like.create({ user_id: userID, caption_id: foundCaption.id });
 		await Caption.update(
 			{ like: foundCaption.like + 1 },
@@ -49,4 +58,17 @@ captionRouter.put('/:id', async (req, res) => {
 	}
 });
 
+captionRouter.delete('/:id', async (req, res) => {
+	try {
+		const userID = req.user.id;
+		const foundCaption = await Caption.findOne({
+			where: { id: req.params.id, user_id: userID },
+		});
+		if (!foundCaption) return res.sendStatus(404);
+		await Caption.destroy({ where: { id: req.params.id, user_id: userID } });
+		return res.sendStatus(204);
+	} catch (error) {
+		return res.sendStatus(500);
+	}
+});
 module.exports = { captionRouter };

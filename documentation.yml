@@ -96,6 +96,28 @@ paths:
           description: Unauthorized
       tags:
         - Image
+    delete:
+      summary: delete the image that corresponds with id
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+      tags:
+        - Image
+
   /images:
     post:
       summary: post a new image
@@ -118,7 +140,7 @@ paths:
         - Image
   /caption{imageID}:
     get:
-      summary: get all the captions corresponding the image
+      summary: get all the captions corresponds with the image
       security:
         - bearerAuth: []
       parameters:
@@ -169,14 +191,41 @@ paths:
         - Caption
   /caption{id}:
     put:
-      summary: add one like to specified capiton
+      summary: like or unlike the specified capiton with the id
       security:
         - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
       responses:
         '204':
           description: No Content
         '500':
           description: Internal Server Error
+        '401':
+          description: Unauthorized
+      tags:
+        - Caption
+    delete:
+      summary: delete caption that corresponds with the id
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: No Content
+        '500':
+          description: Internal Server Error
+        '404':
+          description: Not Found
         '401':
           description: Unauthorized
       tags:

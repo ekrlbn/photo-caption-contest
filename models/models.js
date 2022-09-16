@@ -38,6 +38,7 @@ const Caption = sequelize.define('Caption', {
 	image_id: {
 		type: DataTypes.INTEGER,
 		references: { model: 'Images', key: 'id' },
+		onDelete: 'CASCADE',
 	},
 	caption: { type: DataTypes.STRING },
 	like: {
@@ -54,6 +55,7 @@ const Like = sequelize.define('Like', {
 	caption_id: {
 		type: DataTypes.INTEGER,
 		references: { model: 'Captions', key: 'id' },
+		onDelete: 'CASCADE',
 	},
 });
 
