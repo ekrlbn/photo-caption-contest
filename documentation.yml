@@ -24,6 +24,8 @@ paths:
       description: ''
       operationId: 'post_user'
       responses:
+        '403':
+          description: Unauthorized
         '201':
           description: User Created
           headers:
@@ -36,6 +38,42 @@ paths:
           description: Internal server Error
       tags:
         - User
+  /token:
+    post:
+      summary: sends new bearer token with true credentials
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              example: # Sample object
+                username: username
+                password: password
+      description: ''
+      operationId: 'post_token'
+      responses:
+        '404':
+          description: Not found
+        '401':
+          description: Unauthorized
+        '200':
+          description: OK
+          headers:
+            Authorization:
+              schema:
+                description: JWT token that consists user credentials
+                type: string
+
+        '500':
+          description: Internal server Error
+      tags:
+        - User
+
   /images{id}:
     get:
       summary: get image that corresponds with id

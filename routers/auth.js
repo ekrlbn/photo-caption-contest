@@ -6,16 +6,24 @@ const { User } = require('../models/models');
 
 authRouter.post('/user', async (req, res) => {
 	try {
-		const { password, username } = req.body;
+		const { password } = req.body;
+		let { username } = req.body;
 		if (isEmpty(username, { ignore_whitespace: true })) {
-			return res.json({ message: 'username not found' });
+			return res.status(403).json({ message: 'username not found' });
+		}
+		username = username.trim();
+		const foundUsername = await User.findOne({ where: { username } });
+		if (foundUsername) {
+			return res.status(403).json({ message: 'username is already taken' });
 		}
 		if (!isLength(password, { min: 8 })) {
-			return res.json({ message: 'password must be at least 8 characters' });
+			return res
+				.status(403)
+				.json({ message: 'password must be at least 8 characters' });
 		}
 		const hashedPass = await bcrypt.hash(password, 10);
 		let user = await User.create({
-			username: username.trim(),
+			username,
 			password: hashedPass,
 		});
 		user = user.dataValues;
@@ -28,6 +36,23 @@ authRouter.post('/user', async (req, res) => {
 	return res.status(201).json({ message: 'user created' });
 });
 
+authRouter.post('/token', async (req, res) => {
+	try {
+		const { password } = req.body;
+		let { username } = req.body;
+		username = username.trim();
+		const foundUser = await User.findOne({ where: { username } });
+		if (!foundUser) return res.sendStatus(404);
+		if (!(await bcrypt.compare(password, foundUser.password))) {
+			return res.status(401).send('bad credentials');
+		}
+		const token = await jwt.sign(foundUser, process.env.JWT_SECRET);
+		res.setHeader('Authorization', `Bearer ${token}`);
+		return res.sendStatus(200);
+	} catch (error) {
+		return res.status(500).json({ message: error.message });
+	}
+});
 authRouter.use(async (req, res, next) => {
 	try {
 		const { authorization } = req.headers;
