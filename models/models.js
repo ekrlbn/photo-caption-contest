@@ -8,7 +8,7 @@ const sequelize = new Sequelize(
 	{
 		host: 'localhost',
 		dialect: 'postgres',
-		query: { raw: true, benchmark: true },
+		query: { raw: false, benchmark: true },
 	},
 );
 
@@ -58,6 +58,9 @@ const Like = sequelize.define('Like', {
 		onDelete: 'CASCADE',
 	},
 });
+
+User.hasMany(Caption, { foreignKey: 'user_id' });
+Caption.belongsTo(User, { foreignKey: 'user_id' });
 
 // async function syncModels() {
 // 	await User.sync({ force: true });

@@ -1,13 +1,22 @@
 const captionRouter = require('express').Router();
-const { Caption } = require('../models/models');
+const { Caption, User } = require('../models/models');
 
 captionRouter.get('/:imageID', async (req, res) => {
 	try {
 		const { imageID } = req.params;
-		let captions = await Caption.findAll({ where: { image_id: imageID } });
-		captions = captions.map((o) => o.caption);
+		let captions = await Caption.findAll({
+			where: { image_id: imageID },
+			include: { model: User },
+		});
+		if (captions.length === 0) return res.sendStatus(404);
+		captions = captions.map((o) => ({
+			caption: o.caption,
+			username: o.User.username,
+			like: o.like,
+		}));
 		return res.json(captions);
 	} catch (error) {
+		console.log(error);
 		return res.sendStatus(500);
 	}
 });
