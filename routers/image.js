@@ -44,7 +44,6 @@ imageRouter.delete('/:id', async (req, res) => {
 		await Image.destroy({ where: { id: req.params.id, user_id: user.id } });
 		return res.sendStatus(204);
 	} catch (error) {
-		console.log(error);
 		if (error.errno === -4058) return res.sendStatus(404);
 		return res.sendStatus(500);
 	}
