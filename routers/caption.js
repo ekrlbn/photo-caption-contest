@@ -16,7 +16,6 @@ captionRouter.get('/:imageID', async (req, res) => {
 		}));
 		return res.json(captions);
 	} catch (error) {
-		console.log(error);
 		return res.sendStatus(500);
 	}
 });
