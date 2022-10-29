@@ -3,10 +3,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 
-const app = express();
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
 
+const swaggerDocument = YAML.load('./documentation.yml');
+
+const app = express();
 app.use(bodyParser.json());
 app.use(morgan('dev'));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const { authRouter } = require('./routers/auth');
 const { imageRouter } = require('./routers/image');

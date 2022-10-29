@@ -21,7 +21,9 @@
 		"pg": "^8.8.0",
 		"pg-hstore": "^2.3.4",
 		"sequelize": "^6.21.6",
-		"validator": "^13.7.0"
+		"swagger-ui-express": "^4.5.0",
+		"validator": "^13.7.0",
+		"yamljs": "^0.3.0"
 	},
 	"devDependencies": {
 		"eslint": "^8.23.1",

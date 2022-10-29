@@ -6,14 +6,16 @@ const { Image } = require('../models/models');
 
 const upload = multer({ dest: 'uploads' });
 
-imageRouter.post('/', upload.single('file'), async (req, res) => {
+imageRouter.post('/', upload.any(), async (req, res) => {
 	try {
+		// eslint-disable-next-line prefer-destructuring
+		req.file = req.files[0];
 		const extension = req.file.mimetype.split('/')[1];
 		const { filename } = req.file;
 		await Image.create({ user_id: req.user.id, extension, filename });
 		res.sendStatus('201');
 	} catch (error) {
-		res.send(500, error.message);
+		res.send(500);
 	}
 });
 

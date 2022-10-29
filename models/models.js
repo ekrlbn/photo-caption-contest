@@ -41,37 +41,32 @@ const Caption = sequelize.define('Caption', {
 		onDelete: 'CASCADE',
 	},
 	caption: { type: DataTypes.STRING },
-	like: {
-		type: DataTypes.INTEGER,
-		defaultValue: 0,
-	},
 });
 
-const Like = sequelize.define('Like', {
-	user_id: {
-		type: DataTypes.INTEGER,
-		references: { model: 'Users', key: 'id' },
-	},
-	caption_id: {
-		type: DataTypes.INTEGER,
-		references: { model: 'Captions', key: 'id' },
-		onDelete: 'CASCADE',
-	},
-});
+// const Like = sequelize.define('Like', {
+// 	user_id: {
+// 		type: DataTypes.INTEGER,
+// 		references: { model: 'Users', key: 'id' },
+// 	},
+// 	caption_id: {
+// 		type: DataTypes.INTEGER,
+// 		references: { model: 'Captions', key: 'id' },
+// 		onDelete: 'CASCADE',
+// 	},
+// });
 
 User.hasMany(Caption, { foreignKey: 'user_id' });
 Caption.belongsTo(User, { foreignKey: 'user_id' });
 
-// async function syncModels() {
-// 	await User.sync({ force: true });
-// 	await Image.sync({ force: true });
-// 	await Caption.sync({ force: true });
-// 	await Like.sync({ force: true });
-// }
-// syncModels();
+async function syncModels() {
+	await User.sync();
+	await Image.sync();
+	await Caption.sync();
+	// await Like.sync();
+}
+syncModels();
 module.exports = {
 	User,
 	Image,
 	Caption,
-	Like,
 };

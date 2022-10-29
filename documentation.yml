@@ -74,7 +74,7 @@ paths:
       tags:
         - User
 
-  /images{id}:
+  /images/{id}:
     get:
       summary: get image that corresponds with id
       security:
@@ -138,7 +138,7 @@ paths:
           description: Unauthorized
       tags:
         - Image
-  /caption{imageID}:
+  /caption/{imageID}:
     get:
       summary: get all the captions corresponds with the image
       security:
@@ -191,7 +191,7 @@ paths:
                 caption: 'what a spectacular scenery!'
       tags:
         - Caption
-  /caption{id}:
+  /caption/{id}:
     delete:
       summary: delete caption that corresponds with the id
       security:
