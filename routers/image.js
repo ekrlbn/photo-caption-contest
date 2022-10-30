@@ -14,7 +14,6 @@ imageRouter.get('/', async (req, res) => {
 		});
 		return res.json(allImages);
 	} catch (error) {
-		console.log(error);
 		return res.sendStatus(500);
 	}
 });
