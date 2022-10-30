@@ -46,9 +46,9 @@ authRouter.post('/token', async (req, res) => {
 		if (!(await bcrypt.compare(password, foundUser.password))) {
 			return res.status(401).send('bad credentials');
 		}
-		const token = await jwt.sign(foundUser, process.env.JWT_SECRET);
+		const token = await jwt.sign({ foundUser }, process.env.JWT_SECRET);
 		res.setHeader('Authorization', `Bearer ${token}`);
-		return res.sendStatus(200);
+		return res.json({ token });
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
 	}
