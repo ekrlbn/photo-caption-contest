@@ -3,7 +3,7 @@ info:
   title: Photo Caption
   version: '1.0'
 servers:
-  - url: http://localhost:8080/api
+  - url: https://photo-caption-1.herokuapp.com/api
 paths:
   /user:
     post:
