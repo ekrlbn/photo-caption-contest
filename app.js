@@ -21,6 +21,9 @@ app.use(express.static('/uploads'));
 app.use('/api', authRouter);
 app.use('/api/images', imageRouter);
 app.use('/api/captions', captionRouter);
+app.get('/', (req, res) => {
+	res.redirect('/api-docs');
+});
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
