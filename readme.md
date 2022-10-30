@@ -74,3 +74,9 @@ Post a new caption
 ### DELETE /caption/:id
 
 Delete the caption with the given id
+
+---
+
+## ERD
+
+![ERD](ERD.png)
