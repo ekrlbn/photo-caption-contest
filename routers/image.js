@@ -2,9 +2,22 @@ const imageRouter = require('express').Router();
 // const path = require('path');
 const fs = require('fs').promises;
 const multer = require('multer');
-const { Image } = require('../models/models');
+const { Image, User } = require('../models/models');
 
 const upload = multer({ dest: 'uploads' });
+
+imageRouter.get('/', async (req, res) => {
+	try {
+		const allImages = await User.findAll({
+			include: { model: Image, attributes: ['id'] },
+			attributes: ['username'],
+		});
+		return res.json(allImages);
+	} catch (error) {
+		console.log(error);
+		return res.sendStatus(500);
+	}
+});
 
 imageRouter.post('/', upload.any(), async (req, res) => {
 	try {

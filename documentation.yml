@@ -74,6 +74,39 @@ paths:
       tags:
         - User
 
+  /images:
+    get:
+      summary: get all the images with ids and usernames
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+        '500':
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+      tags:
+        - Image
+    post:
+      summary: post a new image
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '201':
+          description: Created
+        '500':
+          description: Internal Server Error
+        '401':
+          description: Unauthorized
+      tags:
+        - Image
   /images/{id}:
     get:
       summary: get image that corresponds with id
@@ -118,27 +151,7 @@ paths:
       tags:
         - Image
 
-  /images:
-    post:
-      summary: post a new image
-      security:
-        - bearerAuth: []
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: string
-              format: binary
-      responses:
-        '201':
-          description: Created
-        '500':
-          description: Internal Server Error
-        '401':
-          description: Unauthorized
-      tags:
-        - Image
-  /caption/{imageID}:
+  /captions/{imageID}:
     get:
       summary: get all the captions corresponds with the image
       security:
@@ -161,7 +174,7 @@ paths:
           description: Unauthorized
       tags:
         - Caption
-  /caption:
+  /captions:
     post:
       summary: add new caption to any image
       security:
@@ -191,7 +204,7 @@ paths:
                 caption: 'what a spectacular scenery!'
       tags:
         - Caption
-  /caption/{id}:
+  /captions/{id}:
     delete:
       summary: delete caption that corresponds with the id
       security:

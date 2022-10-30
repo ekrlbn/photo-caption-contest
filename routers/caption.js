@@ -8,7 +8,7 @@ captionRouter.get('/:imageID', async (req, res) => {
 			where: { image_id: imageID },
 			include: { model: User },
 		});
-		if (captions.length === 0) return res.sendStatus(404);
+		if (captions.length === 0) return res.send(captions);
 		captions = captions.map((o) => ({
 			caption: o.caption,
 			username: o.User.username,

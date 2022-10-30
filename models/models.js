@@ -57,6 +57,8 @@ const Caption = sequelize.define('Caption', {
 
 User.hasMany(Caption, { foreignKey: 'user_id' });
 Caption.belongsTo(User, { foreignKey: 'user_id' });
+User.hasMany(Image, { foreignKey: 'user_id' });
+Image.belongsTo(User, { foreignKey: 'user_id' });
 
 async function syncModels() {
 	await User.sync();
