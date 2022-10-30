@@ -1,16 +1,16 @@
 const { Sequelize, DataTypes } = require('sequelize');
 require('dotenv').config();
 
-const sequelize = new Sequelize(
-	process.env.DB,
-	process.env.DB_USERNAME,
-	process.env.DB_PASSWORD,
-	{
-		host: 'localhost',
-		dialect: 'postgres',
-		query: { raw: false, benchmark: true },
-	},
-);
+const sequelize = new Sequelize(process.env.URI, {
+	// database: process.env.DB,
+	// username: process.env.DB_USERNAME,
+	// password: process.env.DB_PASSWORD,
+	// host: process.env.DB_HOST,
+	dialectOptions: { ssl: { require: true, rejectUnauthorized: false } },
+
+	dialect: 'postgres',
+	query: { raw: false, benchmark: true },
+});
 
 const User = sequelize.define('User', {
 	id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
