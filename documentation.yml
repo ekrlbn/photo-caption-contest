@@ -1,5 +1,6 @@
 openapi: 3.0.2
 info:
+  description: This API provides several paths to create profiles, post images and adding captions to other profile's images. For more information:[github](https://github.com/ekrlbn/photo-caption-contest)
   title: Photo Caption
   version: '1.0'
 servers:
