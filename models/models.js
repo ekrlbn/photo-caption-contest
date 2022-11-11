@@ -43,18 +43,6 @@ const Caption = sequelize.define('Caption', {
 	caption: { type: DataTypes.STRING },
 });
 
-// const Like = sequelize.define('Like', {
-// 	user_id: {
-// 		type: DataTypes.INTEGER,
-// 		references: { model: 'Users', key: 'id' },
-// 	},
-// 	caption_id: {
-// 		type: DataTypes.INTEGER,
-// 		references: { model: 'Captions', key: 'id' },
-// 		onDelete: 'CASCADE',
-// 	},
-// });
-
 User.hasMany(Caption, { foreignKey: 'user_id' });
 Caption.belongsTo(User, { foreignKey: 'user_id' });
 User.hasMany(Image, { foreignKey: 'user_id' });

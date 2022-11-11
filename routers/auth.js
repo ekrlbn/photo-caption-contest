@@ -28,7 +28,9 @@ authRouter.post('/user', async (req, res) => {
 		});
 		user = user.dataValues;
 		if (!user) throw new Error('internal server error');
-		const token = await jwt.sign(user, process.env.JWT_SECRET);
+		const token = await jwt.sign(user, process.env.JWT_SECRET, {
+			expiresIn: '1d',
+		});
 		res.setHeader('Authorization', `Bearer ${token}`);
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
@@ -46,7 +48,9 @@ authRouter.post('/token', async (req, res) => {
 		if (!(await bcrypt.compare(password, foundUser.password))) {
 			return res.status(401).send('bad credentials');
 		}
-		const token = await jwt.sign({ foundUser }, process.env.JWT_SECRET);
+		const token = await jwt.sign({ foundUser }, process.env.JWT_SECRET, {
+			expiresIn: '1d',
+		});
 		res.setHeader('Authorization', `Bearer ${token}`);
 		return res.json({ token });
 	} catch (error) {
@@ -58,8 +62,8 @@ authRouter.use(async (req, res, next) => {
 		const { authorization } = req.headers;
 		if (!authorization) throw new Error('token not found');
 		const token = req.headers.authorization.split(' ')[1];
-		const user = await jwt.verify(token, process.env.JWT_SECRET);
-
+		let user = await jwt.verify(token, process.env.JWT_SECRET);
+		user = user.foundUser;
 		const foundUser = await User.findOne({
 			where: { username: user.username, password: user.password },
 		});
