@@ -10,6 +10,7 @@ captionRouter.get('/:imageID', async (req, res) => {
 		});
 		if (captions.length === 0) return res.send(captions);
 		captions = captions.map((o) => ({
+			id: o.id,
 			caption: o.caption,
 			username: o.User.username,
 			like: o.like,
@@ -36,35 +37,6 @@ captionRouter.post('/', async (req, res) => {
 		return res.sendStatus(500);
 	}
 });
-
-// captionRouter.put('/:id', async (req, res) => {
-// 	try {
-// 		const userID = req.user.id;
-// 		const foundCaption = await Caption.findByPk(req.params.id);
-// 		if (!foundCaption) return res.sendStatus(404);
-// 		const foundLike = await Like.findOne({
-// 			where: { user_id: userID, caption_id: foundCaption.id },
-// 		});
-// 		if (foundLike) {
-// 			await Like.destroy({
-// 				where: { user_id: userID, caption_id: foundCaption.id },
-// 			});
-// 			await Caption.update(
-// 				{ like: foundCaption.like - 1 },
-// 				{ where: { id: foundCaption.id } },
-// 			);
-// 			return res.sendStatus(204);
-// 		}
-// 		await Like.create({ user_id: userID, caption_id: foundCaption.id });
-// 		await Caption.update(
-// 			{ like: foundCaption.like + 1 },
-// 			{ where: { id: foundCaption.id } },
-// 		);
-// 		return res.sendStatus(204);
-// 	} catch (error) {
-// 		return res.sendStatus(500);
-// 	}
-// });
 
 captionRouter.delete('/:id', async (req, res) => {
 	try {
