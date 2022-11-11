@@ -18,10 +18,8 @@ imageRouter.get('/', async (req, res) => {
 	}
 });
 
-imageRouter.post('/', upload.any(), async (req, res) => {
+imageRouter.post('/', upload.single('file'), async (req, res) => {
 	try {
-		// eslint-disable-next-line prefer-destructuring
-		req.file = req.files[0];
 		const extension = req.file.mimetype.split('/')[1];
 		const { filename } = req.file;
 		await Image.create({ user_id: req.user.id, extension, filename });
