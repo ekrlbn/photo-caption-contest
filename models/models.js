@@ -1,13 +1,9 @@
 const { Sequelize, DataTypes } = require('sequelize');
 require('dotenv').config();
 
-// eslint-disable-next-line operator-linebreak
-const dialectOptions =
-	process.env.NODE_ENV === 'production'
-		? undefined
-		: { ssl: { require: true, rejectUnauthorized: false } };
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
-	dialectOptions,
+	dialectOptions: { ssl: { require: true, rejectUnauthorized: false } },
+
 	dialect: 'postgres',
 	query: { raw: false, benchmark: true },
 });
