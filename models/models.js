@@ -12,7 +12,8 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
-	dialectOptions,
+	// eslint-disable-next-line object-shorthand
+	dialectOptions: dialectOptions,
 	dialect: 'postgres',
 	query: { raw: false, benchmark: true },
 });
