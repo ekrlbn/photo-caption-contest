@@ -7,7 +7,7 @@ let dialectOptions = {
 		rejectUnauthorized: false,
 	},
 };
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'development') {
 	dialectOptions = {};
 }
 
