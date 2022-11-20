@@ -43,12 +43,13 @@ authRouter.post('/token', async (req, res) => {
 		const { password } = req.body;
 		let { username } = req.body;
 		username = username.trim();
-		const foundUser = await User.findOne({ where: { username } });
+		let foundUser = await User.findOne({ where: { username } });
 		if (!foundUser) return res.sendStatus(404);
 		if (!(await bcrypt.compare(password, foundUser.password))) {
-			return res.status(401).send('bad credentials');
+			return res.sendStatus(401);
 		}
-		const token = await jwt.sign({ foundUser }, process.env.JWT_SECRET, {
+		foundUser = foundUser.dataValues;
+		const token = await jwt.sign(foundUser, process.env.JWT_SECRET, {
 			expiresIn: '1d',
 		});
 		res.setHeader('Authorization', `Bearer ${token}`);
@@ -62,8 +63,7 @@ authRouter.use(async (req, res, next) => {
 		const { authorization } = req.headers;
 		if (!authorization) throw new Error('token not found');
 		const token = req.headers.authorization.split(' ')[1];
-		let user = await jwt.verify(token, process.env.JWT_SECRET);
-		user = user.foundUser;
+		const user = await jwt.verify(token, process.env.JWT_SECRET);
 		const foundUser = await User.findOne({
 			where: { username: user.username, password: user.password },
 		});

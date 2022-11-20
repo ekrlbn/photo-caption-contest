@@ -15,6 +15,7 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
 	// eslint-disable-next-line object-shorthand
 	dialectOptions: dialectOptions,
 	dialect: 'postgres',
+	logging: false,
 	query: { raw: false, benchmark: true },
 });
 
@@ -58,7 +59,6 @@ async function syncModels() {
 	await User.sync();
 	await Image.sync();
 	await Caption.sync();
-	// await Like.sync();
 }
 syncModels();
 module.exports = {

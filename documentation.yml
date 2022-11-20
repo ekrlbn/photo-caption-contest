@@ -26,7 +26,7 @@ paths:
       operationId: 'post_user'
       responses:
         '403':
-          description: Unauthorized
+          description: Forbidden
         '201':
           description: User Created
           headers:
