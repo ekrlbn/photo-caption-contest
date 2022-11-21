@@ -5,7 +5,9 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 const { User } = require('../models/models');
+require('dotenv').config();
 
 // const { expect } = chai;
 chai.use(chaiHttp);
@@ -13,8 +15,9 @@ const app = require('../app');
 
 // user
 describe('Authentication Routes', () => {
-	const username = 'testUser98237';
-	const password = 'testPassword';
+	const username = crypto.randomBytes(10).toString('hex');
+	const password = crypto.randomBytes(10).toString('hex');
+
 	after(async () => {
 		await User.destroy({
 			where: {
