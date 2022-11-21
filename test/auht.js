@@ -27,8 +27,8 @@ describe('Authentication Routes', () => {
 	});
 	describe('/user', () => {
 		describe('POST', async () => {
-			it('should send authentication token with header', (done) => {
-				chai
+			it('should send authentication token with header', async () => {
+				await chai
 					.request(app)
 					.post('/api/user')
 					.send({ username, password })
@@ -39,10 +39,9 @@ describe('Authentication Routes', () => {
 						assert.deepEqual(decoded.username, username);
 						const isValid = await bcrypt.compare(password, decoded.password);
 						assert.deepEqual(isValid, true);
-						done();
 					})
 					.catch((err) => {
-						done(err);
+						throw err;
 					});
 			});
 			it('should store it in the database', async () => {
